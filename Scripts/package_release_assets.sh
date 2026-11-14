@@ -5,14 +5,31 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "${ROOT_DIR}/version.env"
 
 VERSION_TAG="${RELEASE_VERSION:-v${MARKETING_VERSION}-zh-Hans}"
-APP_SOURCE="${ROOT_DIR}/.build/release/RepoBar.app"
 DIST_DIR="${ROOT_DIR}/dist"
 
-if [ ! -d "${APP_SOURCE}" ]; then
+find_app_bundle() {
+  if [ -d "${ROOT_DIR}/.build/apple/Products/Release/RepoBar.app" ]; then
+    echo "${ROOT_DIR}/.build/apple/Products/Release/RepoBar.app"
+  elif [ -d "${ROOT_DIR}/.build/release/RepoBar.app" ]; then
+    echo "${ROOT_DIR}/.build/release/RepoBar.app"
+  else
+    echo ""
+  fi
+}
+
+APP_SOURCE="$(find_app_bundle)"
+if [ -z "${APP_SOURCE}" ]; then
   echo "==> Building release app bundle first..."
   "${ROOT_DIR}/Scripts/package_app.sh" release
+  APP_SOURCE="$(find_app_bundle)"
 fi
 
+if [ -z "${APP_SOURCE}" ] || [ ! -d "${APP_SOURCE}" ]; then
+  echo "ERROR: Could not locate built RepoBar.app bundle" >&2
+  exit 1
+fi
+
+echo "==> Using app bundle at: ${APP_SOURCE}"
 echo "==> Configuring Info.plist for standalone Chinese edition (file token store + disable upstream overwrite)"
 /usr/libexec/PlistBuddy -c "Delete :RepoBarTokenStore" "${APP_SOURCE}/Contents/Info.plist" 2>/dev/null || true
 /usr/libexec/PlistBuddy -c "Add :RepoBarTokenStore string file" "${APP_SOURCE}/Contents/Info.plist"

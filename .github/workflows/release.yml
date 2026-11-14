@@ -1,153 +1,87 @@
 name: Release
-run-name: Release ${{ inputs.tag || github.ref_name }}${{ inputs.dry_run && ' (dry run)' || '' }}
 
 on:
   push:
-    tags: ['v*']
+    tags:
+      - 'v*'
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: Build, sign, notarize and verify without publishing
-        type: boolean
-        default: true
       tag:
-        description: Existing signed tag (leave empty to prove current main)
-        type: string
-        default: ''
+        description: 'Release tag name (e.g. v0.10.4-zh-Hans)'
+        required: false
+        default: 'v0.10.4-zh-Hans'
 
-permissions: {}
+permissions:
+  contents: write
+
 concurrency:
-  group: release-${{ inputs.tag || github.ref }}
+  group: release-${{ github.ref }}
   cancel-in-progress: false
 
 env:
   MACOSX_DEPLOYMENT_TARGET: '15.0'
-  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
-  RELEASE_TAG: ${{ github.event_name == 'push' && github.ref_name || inputs.tag }}
 
 jobs:
-  build:
-    runs-on: xcode-27
-    timeout-minutes: 60
-    permissions:
-      contents: read
-      actions: read
-    outputs:
-      commit: ${{ steps.validate.outputs.commit }}
+  release:
+    name: Build & Publish Multi-Arch Release Assets
+    runs-on: macos-latest
+    timeout-minutes: 45
     steps:
-      - name: Preflight Homebrew access before a publishing run
-        if: env.DRY_RUN == 'false'
-        env:
-          GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-        run: |
-          test -n "$GH_TOKEN"
-          test "$(gh api repos/steipete/homebrew-tap --jq .permissions.push)" = true
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
-          persist-credentials: false
-      - name: Enable package manager
-        run: corepack enable
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: '26'
-          cache: pnpm
-      - name: Validate frozen source and exact push CI
-        id: validate
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/validate-release.py
-      - run: pnpm install --frozen-lockfile
-      - name: Import signing credentials into an ephemeral keychain
-        env:
-          MACOS_SIGNING_P12: ${{ secrets.MACOS_SIGNING_P12 }}
-          MACOS_SIGNING_P12_PASSWORD: ${{ secrets.MACOS_SIGNING_P12_PASSWORD }}
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-          ASC_PRIVATE_KEY_P8: ${{ secrets.ASC_PRIVATE_KEY_P8 }}
-          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
-        run: bash .github/scripts/setup-signing.sh
-      - name: Build universal app and CLI, notarize, package, and sign appcast
-        env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-          ASC_PRIVATE_KEY_P8: ${{ secrets.ASC_PRIVATE_KEY_P8 }}
-        run: bash .github/scripts/package-release.sh
-      - name: Remove signing credentials
-        if: always()
+
+      - name: Select latest Xcode
         run: |
-          if [[ -f "$RUNNER_TEMP/original-keychains" ]]; then
-            python3 - "$RUNNER_TEMP/original-keychains" <<'PY'
-          import pathlib, shlex, subprocess, sys
-          subprocess.run(['security','list-keychains','-d','user','-s',*shlex.split(pathlib.Path(sys.argv[1]).read_text())], check=True)
-          PY
+          LATEST_XCODE="$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -n 1 || true)"
+          if [ -n "${LATEST_XCODE}" ]; then
+            echo "Selecting ${LATEST_XCODE}"
+            sudo xcode-select -s "${LATEST_XCODE}/Contents/Developer"
           fi
-          if [[ -f "$RUNNER_TEMP/release.keychain-db" ]]; then
-            security delete-keychain "$RUNNER_TEMP/release.keychain-db"
-          fi
-          rm -f "$RUNNER_TEMP/signing.p12" "$RUNNER_TEMP/sparkle-key"
-      - name: Verify source unchanged
-        run: git diff --exit-code
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+          xcodebuild -version
+          swift --version
+
+      - name: Cache SwiftPM build artifacts
+        uses: actions/cache@v4
         with:
-          name: release-${{ github.run_id }}-${{ github.run_attempt }}
-          path: release/
+          path: |
+            .build/repositories
+            .build/checkouts
+            .build/artifacts
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Build Universal Release Bundle (arm64 + x86_64)
+        run: |
+          chmod +x Scripts/*.sh
+          ./Scripts/package_app.sh release
+
+      - name: Package Multi-Arch Installers (DMG, ZIP, CLI tar.gz, SHA256SUMS)
+        env:
+          RELEASE_VERSION: ${{ github.event_name == 'push' && github.ref_name || inputs.tag || 'v0.10.4-zh-Hans' }}
+        run: |
+          ./Scripts/package_release_assets.sh
+
+      - name: Upload build artifacts to workflow run
+        uses: actions/upload-artifact@v4
+        with:
+          name: RepoBar-${{ github.event_name == 'push' && github.ref_name || inputs.tag || 'v0.10.4-zh-Hans' }}-Installers
+          path: dist/*
           if-no-files-found: error
-          retention-days: 14
 
-  verify:
-    needs: build
-    runs-on: xcode-27
-    timeout-minutes: 15
-    permissions:
-      contents: read
-      actions: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ needs.build.outputs.commit }}
-          persist-credentials: false
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: release-${{ github.run_id }}-${{ github.run_attempt }}
-          path: release/
-      - name: Ensure Rosetta can execute Intel binaries
+      - name: Publish to GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.event_name == 'push' && github.ref_name || inputs.tag || 'v0.10.4-zh-Hans' }}
         run: |
-          if ! arch -x86_64 /usr/bin/true; then
-            sudo softwareupdate --install-rosetta --agree-to-license
+          if gh release view "${TAG_NAME}" >/dev/null 2>&1; then
+            echo "Uploading assets to existing release ${TAG_NAME}..."
+            gh release upload "${TAG_NAME}" dist/* --clobber
+          else
+            echo "Creating new release ${TAG_NAME}..."
+            gh release create "${TAG_NAME}" dist/* \
+              --title "RepoBar ${TAG_NAME} 简体中文完整汉化版 (Simplified Chinese Edition)" \
+              --generate-notes
           fi
-          arch -x86_64 /usr/bin/true
-      - name: Independently verify signed artifacts and smoke the bundled CLI
-        run: bash .github/scripts/verify-release.sh
-
-  publish:
-    needs: [build, verify]
-    if: github.event_name == 'push' || !inputs.dry_run
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    permissions:
-      contents: write
-      actions: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ needs.build.outputs.commit }}
-          persist-credentials: false
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: release-${{ github.run_id }}-${{ github.run_attempt }}
-          path: release/
-      - name: Verify uploaded bytes and publish once
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_COMMIT: ${{ needs.build.outputs.commit }}
-        run: python3 .github/scripts/publish-release.py
-      - name: Update the public Sparkle feed
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/release-handoff.py appcast
-      - name: Update the Homebrew cask from the verified archive checksum
-        env:
-          GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-        run: python3 .github/scripts/release-handoff.py homebrew

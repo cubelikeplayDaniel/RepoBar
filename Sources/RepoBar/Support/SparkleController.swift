@@ -61,10 +61,9 @@ final class SparkleController: NSObject {
         #if canImport(Sparkle)
             let bundleURL = Bundle.main.bundleURL
             let isBundledApp = bundleURL.pathExtension == "app"
-            let isSigned = SparkleController.isDeveloperIDSigned(bundleURL: bundleURL)
             let isHomebrew = InstallOrigin.isHomebrewCask(appBundleURL: bundleURL)
-            // Mirror Trimmy: disable Sparkle entirely for unsigned/dev runs to avoid dialogs and signature errors.
-            let canUseSparkle = isBundledApp && isSigned && !isHomebrew
+            let hasPublicKey = (Bundle.main.object(forInfoDictionaryKey: "SUPublicEDKey") as? String)?.isEmpty == false
+            let canUseSparkle = isBundledApp && hasPublicKey && !isHomebrew
         #else
             let canUseSparkle = false
         #endif

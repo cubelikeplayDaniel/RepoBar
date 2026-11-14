@@ -137,17 +137,14 @@ cat > "${INFO_PLIST}" <<PLIST
     <key>LSMinimumSystemVersion</key><string>15.0</string>
     <key>CFBundleShortVersionString</key><string>${MARKETING_VERSION}</string>
     <key>CFBundleVersion</key><string>${BUILD_NUMBER}</string>
-    <key>SUFeedURL</key><string>https://raw.githubusercontent.com/steipete/RepoBar/main/appcast.xml</string>
-    <key>SUPublicEDKey</key><string>AGCY8w5vHirVfGGDGc8Szc5iuOqupZSh9pMj/Qs67XI=</string>
+    <key>SUFeedURL</key><string>https://raw.githubusercontent.com/cubelikeplayDaniel/RepoBar/main/appcast.xml</string>
+    <key>SUPublicEDKey</key><string>f5fic5IojIONW243GshTw1leInxU0Pag0FLFuzrONSA=</string>
     <key>SUEnableAutomaticChecks</key><true/>
     <key>SUEnableInstallerLauncherService</key><true/>
     <key>LSUIElement</key><true/>
     <key>LSMultipleInstancesProhibited</key><true/>
     <key>NSHighResolutionCapable</key><true/>
-$(if [ "${CONFIGURATION}" = "debug" ]; then cat <<'PLIST_DEBUG_AUTH'
     <key>RepoBarTokenStore</key><string>file</string>
-PLIST_DEBUG_AUTH
-fi)
     <key>CFBundleIconFile</key><string>Icon</string>
     <key>CFBundleURLTypes</key>
     <array>

@@ -40,7 +40,7 @@ struct AboutSettingsView: View {
         VStack(spacing: 8) {
             if let image = NSApplication.shared.applicationIconImage {
                 Button {
-                    if let url = URL(string: "https://github.com/steipete/RepoBar") {
+                    if let url = URL(string: "https://github.com/cubelikeplayDaniel/RepoBar") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
@@ -83,9 +83,9 @@ struct AboutSettingsView: View {
             }
 
             VStack(spacing: 6) {
-                AboutLinkRow(icon: "chevron.left.slash.chevron.right", title: "GitHub", url: "https://github.com/steipete/RepoBar")
-                AboutLinkRow(icon: "globe", title: AppLocalizer().string("Website"), url: "https://repobar.app")
-                AboutLinkRow(icon: "ant", title: AppLocalizer().string("Issue Tracker"), url: "https://github.com/steipete/RepoBar/issues")
+                AboutLinkRow(icon: "chevron.left.slash.chevron.right", title: "GitHub", url: "https://github.com/cubelikeplayDaniel/RepoBar")
+                AboutLinkRow(icon: "globe", title: AppLocalizer().string("Website"), url: "https://github.com/cubelikeplayDaniel/RepoBar/releases/latest")
+                AboutLinkRow(icon: "ant", title: AppLocalizer().string("Issue Tracker"), url: "https://github.com/cubelikeplayDaniel/RepoBar/issues")
                 AboutLinkRow(icon: "envelope", title: AppLocalizer().string("Email"), url: "mailto:peter@steipete.me")
             }
             .frame(maxWidth: .infinity)

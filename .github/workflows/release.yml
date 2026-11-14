@@ -58,9 +58,10 @@ jobs:
           chmod +x Scripts/*.sh
           ./Scripts/package_app.sh release
 
-      - name: Package Multi-Arch Installers (DMG, ZIP, CLI tar.gz, SHA256SUMS)
+      - name: Package Multi-Arch Installers (DMG, ZIP, CLI tar.gz, appcast.xml, SHA256SUMS)
         env:
           RELEASE_VERSION: ${{ github.event_name == 'push' && github.ref_name || inputs.tag || 'v0.10.4-zh-Hans' }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
         run: |
           ./Scripts/package_release_assets.sh
 
@@ -71,7 +72,7 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
-      - name: Publish to GitHub Releases
+      - name: Publish to GitHub Releases and update appcast.xml on main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.event_name == 'push' && github.ref_name || inputs.tag || 'v0.10.4-zh-Hans' }}
@@ -84,4 +85,17 @@ jobs:
             gh release create "${TAG_NAME}" dist/* \
               --title "RepoBar ${TAG_NAME} 简体中文完整汉化版 (Simplified Chinese Edition)" \
               --generate-notes
+          fi
+
+          if [ -f dist/appcast.xml ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git fetch origin main
+            git checkout -B main origin/main
+            cp dist/appcast.xml appcast.xml
+            if ! git diff --quiet appcast.xml; then
+              git add appcast.xml
+              git commit -m "chore(appcast): update Sparkle feed for ${TAG_NAME}"
+              git push origin main
+            fi
           fi

@@ -12,10 +12,10 @@ struct GitHubArchiveSettingsSection: View {
 
     var body: some View {
         Section {
-            Toggle("Use archives when rate limited", isOn: self.fallbackBinding)
+            Toggle(AppLocalizer().string("Use archives when rate limited"), isOn: self.fallbackBinding)
 
             if self.settings.sources.isEmpty {
-                Text("No GitHub archives configured.")
+                Text(AppLocalizer().string("No GitHub archives configured."))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
@@ -30,25 +30,25 @@ struct GitHubArchiveSettingsSection: View {
                     .foregroundStyle(.red)
             }
 
-            LabeledContent("Repo") {
+            LabeledContent(AppLocalizer().string("Repo")) {
                 HStack {
-                    TextField("owner/repo, URL, or local path", text: self.$repository)
+                    TextField(AppLocalizer().string("owner/repo, URL, or local path"), text: self.$repository)
                         .textFieldStyle(.roundedBorder)
 
-                    Button("Add Repo") {
+                    Button(AppLocalizer().string("Add Repo")) {
                         self.addArchive()
                     }
                     .disabled(!self.canAdd)
 
-                    Button("Choose Repo…") {
+                    Button(AppLocalizer().string("Choose Repo…")) {
                         self.chooseDirectory { self.repository = $0 }
                     }
                 }
             }
         } header: {
-            Text("GitHub Archives")
+            Text(AppLocalizer().string("GitHub Archives"))
         } footer: {
-            Text("Point RepoBar at a snapshot repository. RepoBar manages the imported database internally and uses it only when GitHub is rate limited.")
+            Text(AppLocalizer().string("Point RepoBar at a snapshot repository. RepoBar manages the imported database internally and uses it only when GitHub is rate limited."))
         }
         .onAppear {
             self.refreshStatuses()
@@ -93,7 +93,7 @@ struct GitHubArchiveSettingsSection: View {
                 }
                 .buttonStyle(.borderless)
                 .disabled(self.updatingIDs.contains(source.id))
-                .help("Pull and import archive")
+                .help(AppLocalizer().string("Pull and import archive"))
                 Button {
                     self.settings.sources.removeAll { $0.id == source.id }
                     self.persist()
@@ -101,7 +101,7 @@ struct GitHubArchiveSettingsSection: View {
                     Image(systemName: "trash")
                 }
                 .buttonStyle(.borderless)
-                .help("Remove archive")
+                .help(AppLocalizer().string("Remove archive"))
             }
 
             Text(self.detailLine(for: source))

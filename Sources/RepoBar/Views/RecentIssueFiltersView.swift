@@ -7,7 +7,7 @@ struct RecentIssueFiltersView: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Picker("Scope", selection: self.$session.recentIssueScope) {
+            Picker(AppLocalizer().string("Scope"), selection: self.$session.recentIssueScope) {
                 ForEach(RecentIssueScope.allCases, id: \.self) { scope in
                     Text(AppLocalizer().string(scope.label)).tag(scope)
                 }

@@ -84,7 +84,7 @@ private struct PrereleasePillView: View {
     let isHighlighted: Bool
 
     var body: some View {
-        Text("Pre")
+        Text(AppLocalizer().string("Pre"))
             .font(.caption2.weight(.semibold))
             .lineLimit(1)
             .foregroundStyle(self.isHighlighted ? .white.opacity(0.95) : Color(nsColor: .systemPurple))

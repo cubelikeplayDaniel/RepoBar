@@ -14,7 +14,7 @@ struct AccountsListSection: View {
     var body: some View {
         Section {
             if self.session.settings.accounts.isEmpty {
-                Text("No accounts configured yet. Sign in below to add your first account.")
+                Text(AppLocalizer().string("No accounts configured yet. Sign in below to add your first account."))
                     .font(.callout)
                     .foregroundStyle(.secondary)
             } else {
@@ -26,9 +26,9 @@ struct AccountsListSection: View {
                 }
             }
         } header: {
-            Text("Accounts")
+            Text(AppLocalizer().string("Accounts"))
         } footer: {
-            Text("Sign in below to add additional accounts. The active account is used for CLI commands and the default for menu actions.")
+            Text(AppLocalizer().string("Sign in below to add additional accounts. The active account is used for CLI commands and the default for menu actions."))
         }
     }
 
@@ -41,12 +41,12 @@ struct AccountsListSection: View {
                 Text(account.usernameAtHost)
                     .font(.body.weight(.medium))
                 HStack(spacing: 6) {
-                    Text(account.authMethod.label)
+                    Text(AppLocalizer().string(account.authMethod.label))
                     Text("•")
                     Text(account.host.host ?? "github.com")
                     if account.id == self.session.settings.activeAccountID {
                         Text("•")
-                        Text("active")
+                        Text(AppLocalizer().string("active"))
                             .foregroundStyle(.green)
                     }
                 }
@@ -55,13 +55,13 @@ struct AccountsListSection: View {
             }
             Spacer(minLength: 8)
 
-            Button("Use") {
+            Button(AppLocalizer().string("Use")) {
                 Task { await self.appState.switchActiveAccount(to: account.id) }
             }
             .controlSize(.small)
             .disabled(account.id == self.session.settings.activeAccountID)
 
-            Button("Check") {
+            Button(AppLocalizer().string("Check")) {
                 Task { await self.checkToken(for: account.id) }
             }
             .controlSize(.small)
@@ -72,7 +72,7 @@ struct AccountsListSection: View {
                 Image(systemName: "trash")
             }
             .controlSize(.small)
-            .help("Remove account")
+            .help(AppLocalizer().string("Remove account"))
         }
         .padding(.vertical, 6)
     }

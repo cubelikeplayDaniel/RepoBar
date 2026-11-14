@@ -12,9 +12,9 @@ enum IssueNavigatorKindFilter: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .all: "Issues + PRs"
-        case .issues: "Issues"
-        case .pullRequests: "Pull Requests"
+        case .all: AppLocalizer().string("Issues + PRs")
+        case .issues: AppLocalizer().string("Issues")
+        case .pullRequests: AppLocalizer().string("Pull Requests")
         }
     }
 
@@ -46,7 +46,9 @@ struct IssueNavigatorScope: Identifiable, Hashable {
         self.fullName ?? "__all"
     }
 
-    static let all = IssueNavigatorScope(fullName: nil, title: "All Repositories")
+    static var all: IssueNavigatorScope {
+        IssueNavigatorScope(fullName: nil, title: AppLocalizer().string("All Repositories"))
+    }
 }
 
 extension GitHubReferenceMatch {

@@ -96,7 +96,7 @@ private struct DraftPillView: View {
     let isHighlighted: Bool
 
     var body: some View {
-        Text("Draft")
+        Text(AppLocalizer().string("Draft"))
             .font(.caption2.weight(.semibold))
             .lineLimit(1)
             .foregroundStyle(self.isHighlighted ? .white.opacity(0.95) : Color(nsColor: .systemOrange))

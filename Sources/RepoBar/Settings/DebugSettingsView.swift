@@ -9,32 +9,32 @@ struct DebugSettingsView: View {
 
     var body: some View {
         Form {
-            Section("Debug") {
-                Button("Clear cache") {
+            Section(AppLocalizer().string("Debug")) {
+                Button(AppLocalizer().string("Clear cache")) {
                     Task {
                         await self.appState.clearCaches()
                         await self.loadDiagnosticsIfEnabled()
                     }
                 }
-                Button("Clear repo detail cache") {
+                Button(AppLocalizer().string("Clear repo detail cache")) {
                     Task {
                         await self.appState.github.clearRepoDetailCache()
                         await self.loadDiagnosticsIfEnabled()
                     }
                 }
-                Button("Clear contribution heatmap cache") {
+                Button(AppLocalizer().string("Clear contribution heatmap cache")) {
                     self.appState.clearContributionCache()
                 }
-                Button("Clear release cache") {
+                Button(AppLocalizer().string("Clear release cache")) {
                     Task {
                         await self.appState.github.clearCache()
                         self.appState.requestRefresh(cancelInFlight: true)
                     }
                 }
-                Button("Force refresh") {
+                Button(AppLocalizer().string("Force refresh")) {
                     self.appState.requestRefresh(cancelInFlight: true)
                 }
-                Toggle("Show diagnostics overlay", isOn: self.$session.settings.diagnosticsEnabled)
+                Toggle(AppLocalizer().string("Show diagnostics overlay"), isOn: self.$session.settings.diagnosticsEnabled)
                     .onChange(of: self.session.settings.diagnosticsEnabled) { _, newValue in
                         self.appState.persistSettings()
                         Task {
@@ -44,13 +44,13 @@ struct DebugSettingsView: View {
                     }
             }
 
-            Section("Logging") {
-                Picker("Verbosity", selection: self.$session.settings.loggingVerbosity) {
+            Section(AppLocalizer().string("Logging")) {
+                Picker(AppLocalizer().string("Verbosity"), selection: self.$session.settings.loggingVerbosity) {
                     ForEach(LogVerbosity.allCases, id: \.self) { level in
-                        Text(level.label).tag(level)
+                        Text(AppLocalizer().string(level.label)).tag(level)
                     }
                 }
-                Toggle("Log to file", isOn: self.$session.settings.fileLoggingEnabled)
+                Toggle(AppLocalizer().string("Log to file"), isOn: self.$session.settings.fileLoggingEnabled)
             }
             .onChange(of: self.session.settings.loggingVerbosity) { _, _ in
                 self.applyLoggingSettings()
@@ -59,55 +59,55 @@ struct DebugSettingsView: View {
                 self.applyLoggingSettings()
             }
 
-            Section("Diagnostics") {
-                LabeledContent("Git binary") {
+            Section(AppLocalizer().string("Diagnostics")) {
+                LabeledContent(AppLocalizer().string("Git binary")) {
                     Text(self.gitExecutableInfo.path)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
-                LabeledContent("Git version") {
+                LabeledContent(AppLocalizer().string("Git version")) {
                     Text(self.gitExecutableInfo.version ?? "—")
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
-                LabeledContent("Git sandboxed") {
+                LabeledContent(AppLocalizer().string("Git sandboxed")) {
                     Text(self.gitExecutableInfo.isSandboxed ? "Yes" : "No")
                 }
                 if let error = self.gitExecutableInfo.error, !error.isEmpty {
-                    LabeledContent("Git error") {
+                    LabeledContent(AppLocalizer().string("Git error")) {
                         Text(error)
                             .lineLimit(2)
                             .truncationMode(.middle)
                             .foregroundStyle(.secondary)
                     }
                 }
-                LabeledContent("API host") {
+                LabeledContent(AppLocalizer().string("API host")) {
                     Text(self.diagnostics.apiHost.absoluteString)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
-                LabeledContent("REST rate limit") {
+                LabeledContent(AppLocalizer().string("REST rate limit")) {
                     Text(
                         self.diagnostics.restRateLimit.map(self.formatRate)
                             ?? "— (not fetched yet)"
                     )
                 }
-                LabeledContent("GraphQL rate limit") {
+                LabeledContent(AppLocalizer().string("GraphQL rate limit")) {
                     Text(
                         self.diagnostics.graphQLRateLimit.map(self.formatRate)
                             ?? "— (not fetched yet)"
                     )
                 }
                 if let reset = diagnostics.rateLimitReset {
-                    LabeledContent("Rate limit resets") {
+                    LabeledContent(AppLocalizer().string("Rate limit resets")) {
                         Text(RelativeFormatter.string(from: reset, relativeTo: Date()))
                     }
                 }
                 if let error = diagnostics.lastRateLimitError {
-                    LabeledContent("Last API notice") { Text(error).foregroundStyle(.red) }
+                    LabeledContent(AppLocalizer().string("Last API notice")) { Text(error).foregroundStyle(.red) }
                 }
                 if self.diagnostics.endpointCooldowns.isEmpty == false {
-                    LabeledContent("Endpoint cooldowns") {
+                    LabeledContent(AppLocalizer().string("Endpoint cooldowns")) {
                         VStack(alignment: .trailing, spacing: 3) {
                             ForEach(self.diagnostics.endpointCooldowns, id: \.url) { cooldown in
                                 Text(self.endpointCooldownText(cooldown))
@@ -118,9 +118,9 @@ struct DebugSettingsView: View {
                         }
                     }
                 }
-                LabeledContent("Backoff entries") { Text("\(self.diagnostics.backoffEntries)") }
-                LabeledContent("ETag entries") { Text("\(self.diagnostics.etagEntries)") }
-                Button("Refresh diagnostics") { Task { await self.loadDiagnosticsIfEnabled() } }
+                LabeledContent(AppLocalizer().string("Backoff entries")) { Text("\(self.diagnostics.backoffEntries)") }
+                LabeledContent(AppLocalizer().string("ETag entries")) { Text("\(self.diagnostics.etagEntries)") }
+                Button(AppLocalizer().string("Refresh diagnostics")) { Task { await self.loadDiagnosticsIfEnabled() } }
             }
             .opacity(self.session.settings.diagnosticsEnabled ? 1 : 0.4)
             .disabled(!self.session.settings.diagnosticsEnabled)

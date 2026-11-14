@@ -37,6 +37,38 @@ struct LocalizationTests {
             == "重新启动以完成更新至 1.2。")
     }
 
+    @Test func `issue navigator and secondary views are localized`() {
+        let chinese = AppLocalizer(preferredLanguages: ["zh-Hans"])
+        #expect(chinese.string("Search issues and pull requests") == "搜索 Issue 与拉取请求")
+        #expect(chinese.string("Pick a result") == "选择一个结果")
+        #expect(chinese.string("Updated newest first") == "按最新更新排序")
+        #expect(chinese.string("No matches") == "无匹配结果")
+        #expect(chinese.string("Open in Browser") == "在浏览器中打开")
+        #expect(chinese.string("Copy URL") == "复制 URL")
+        #expect(chinese.string("Back") == "返回")
+        #expect(chinese.string("Draft") == "草稿")
+        #expect(chinese.string("Pre") == "预发布")
+        #expect(chinese.string("Concurrent Jobs") == "并发作业")
+        #expect(chinese.string("Runners") == "运行器 (Runners)")
+
+        let turkish = AppLocalizer(preferredLanguages: ["tr"])
+        #expect(turkish.string("Search issues and pull requests") == "Sorunları ve çekme isteklerini ara")
+        #expect(turkish.string("Pick a result") == "Bir sonuç seçin")
+        #expect(turkish.string("Updated newest first") == "En yeniye göre güncellendi")
+        #expect(turkish.string("No matches") == "Eşleşme yok")
+        #expect(turkish.string("Open in Browser") == "Tarayıcıda Aç")
+    }
+
+    @Test func `relative formatter is localized`() {
+        let now = Date()
+        let pastMinute = now.addingTimeInterval(-180)
+        let formattedChinese = RelativeFormatter.string(from: pastMinute, relativeTo: now, preferredLanguages: ["zh-Hans"])
+        #expect(formattedChinese == "3分钟前")
+
+        let formattedTurkish = RelativeFormatter.string(from: pastMinute, relativeTo: now, preferredLanguages: ["tr"])
+        #expect(formattedTurkish == "3 dk. önce")
+    }
+
     @Test func `language priority and fallback`() {
         #expect(AppLocalizer(preferredLanguages: ["en-US", "tr"]).string("General") == "General")
         #expect(AppLocalizer(preferredLanguages: ["zh-Hans", "en"]).string("General") == "通用")

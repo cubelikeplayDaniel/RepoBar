@@ -191,7 +191,7 @@ struct IssueNavigatorScopePopUp: NSViewRepresentable {
             if representedIDs != scopeIDs {
                 popup.removeAllItems()
                 for scope in self.scopes {
-                    popup.addItem(withTitle: scope.title)
+                    popup.addItem(withTitle: AppLocalizer().string(scope.title))
                     popup.lastItem?.representedObject = scope.id
                 }
             }

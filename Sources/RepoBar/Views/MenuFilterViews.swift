@@ -63,7 +63,7 @@ struct MenuRepoFiltersView: View {
                     .font(.system(size: 15, weight: .medium))
             }
             .accessibilityLabel("Sort by \(self.session.settings.repoList.menuSortKey.menuLabel)")
-            .help("Sort by \(self.session.settings.repoList.menuSortKey.menuLabel). Click to cycle.")
+            .help(String(format: AppLocalizer().string("Sort by %@. Click to cycle."), AppLocalizer().string(self.session.settings.repoList.menuSortKey.menuLabel)))
             .padding(2)
             .background(MenuFilterBarBackground())
             .fixedSize(horizontal: true, vertical: false)
@@ -161,7 +161,7 @@ struct RecentPullRequestFiltersView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Picker("Scope", selection: self.$session.recentPullRequestScope) {
+            Picker(AppLocalizer().string("Scope"), selection: self.$session.recentPullRequestScope) {
                 ForEach(RecentPullRequestScope.allCases, id: \.self) { scope in
                     Text(AppLocalizer().string(scope.label)).tag(scope)
                 }
@@ -174,7 +174,7 @@ struct RecentPullRequestFiltersView: View {
 
             Spacer(minLength: 2)
 
-            Picker("Engagement", selection: self.$session.recentPullRequestEngagement) {
+            Picker(AppLocalizer().string("Engagement"), selection: self.$session.recentPullRequestEngagement) {
                 ForEach(RecentPullRequestEngagement.allCases, id: \.self) { engagement in
                     Label(AppLocalizer().string(engagement.label), systemImage: engagement.systemImage)
                         .labelStyle(.iconOnly)

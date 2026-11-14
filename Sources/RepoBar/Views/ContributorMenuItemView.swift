@@ -17,7 +17,7 @@ struct ContributorMenuItemView: View {
                     .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
                     .lineLimit(1)
 
-                Text("\(self.summary.contributions) contributions")
+                Text(String(format: AppLocalizer().string("%d contributions"), self.summary.contributions))
                     .font(.caption)
                     .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                     .lineLimit(1)

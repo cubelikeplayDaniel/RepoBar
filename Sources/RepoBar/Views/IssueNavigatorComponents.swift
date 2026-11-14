@@ -25,7 +25,7 @@ struct IssueNavigatorResultRow: View {
                         .lineLimit(1)
                         .truncationMode(.middle)
                     if let state = match.state?.label {
-                        Text(state)
+                        Text(AppLocalizer().string(state))
                     }
                     Text(RelativeFormatter.string(from: self.match.updatedAt, relativeTo: self.now))
                 }
@@ -107,7 +107,7 @@ struct IssueNavigatorCountBadge: View {
         HStack(spacing: 7) {
             Text("\(self.count)")
                 .font(.system(size: 13, weight: .bold, design: .rounded))
-            Text(self.count == 1 ? "match" : "matches")
+            Text(self.count == 1 ? AppLocalizer().string("match") : AppLocalizer().string("matches"))
                 .font(.caption.weight(.medium))
                 .foregroundStyle(.secondary)
         }

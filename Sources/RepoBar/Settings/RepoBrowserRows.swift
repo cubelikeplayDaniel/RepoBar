@@ -163,10 +163,17 @@ enum RepoBrowserRows {
         let loaded = allRows.count(where: { !$0.isManual })
         let pinned = allRows.count(where: { $0.visibility == .pinned })
         let hidden = allRows.count(where: { $0.visibility == .hidden })
+        let localizer = AppLocalizer()
         if visible == total {
-            return "\(total) repositories, \(loaded) loaded, \(pinned) pinned, \(hidden) hidden"
+            return String(
+                format: localizer.string("%d repositories, %d loaded, %d pinned, %d hidden"),
+                total, loaded, pinned, hidden
+            )
         }
-        return "\(visible) of \(total) repositories, \(pinned) pinned, \(hidden) hidden"
+        return String(
+            format: localizer.string("%d of %d repositories, %d pinned, %d hidden"),
+            visible, total, pinned, hidden
+        )
     }
 
     private static func manualRow(fullName: String, visibility: RepoVisibility) -> RepoBrowserRow {

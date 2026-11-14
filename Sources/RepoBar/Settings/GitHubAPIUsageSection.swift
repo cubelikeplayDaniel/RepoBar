@@ -15,7 +15,7 @@ struct GitHubAPIUsageSection: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         if let updated = self.lastUpdatedText(state: state, now: now) {
-                            Text("Updated \(updated)")
+                            Text(String(format: AppLocalizer().string("Updated %@"), updated))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -30,7 +30,7 @@ struct GitHubAPIUsageSection: View {
                                     .controlSize(.small)
                                     .frame(width: 16, height: 16)
                             } else {
-                                Label("Refresh", systemImage: "arrow.clockwise")
+                                Label(AppLocalizer().string("Refresh"), systemImage: "arrow.clockwise")
                             }
                         }
                         .controlSize(.small)
@@ -49,7 +49,7 @@ struct GitHubAPIUsageSection: View {
                         .frame(width: 18)
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Usage Details")
+                        Text(AppLocalizer().string("Usage Details"))
                             .font(.body.weight(.medium))
                         Text(state.compactSummary(now: now))
                             .font(.caption)
@@ -59,9 +59,9 @@ struct GitHubAPIUsageSection: View {
                 }
             }
         } header: {
-            Text("GitHub API")
+            Text(AppLocalizer().string("GitHub API"))
         } footer: {
-            Text("Usage for the active account, including shared budgets, reset times, and current blockers.")
+            Text(AppLocalizer().string("Usage for the active account, including shared budgets, reset times, and current blockers."))
         }
         .task(id: self.session.settingsAPIUsageExpanded) {
             guard self.session.settingsAPIUsageExpanded else { return }
@@ -96,7 +96,7 @@ private struct GitHubAPIUsageGroup: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(self.section.title ?? "Details")
+            Text(AppLocalizer().string(self.section.title ?? "Details"))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)

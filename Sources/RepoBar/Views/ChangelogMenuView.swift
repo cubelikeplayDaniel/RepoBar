@@ -42,7 +42,7 @@ struct ChangelogMenuView: View {
             .clipped()
 
             if self.content.isTruncated {
-                Text("Preview truncated")
+                Text(AppLocalizer().string("Preview truncated"))
                     .font(.caption2)
                     .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
             }

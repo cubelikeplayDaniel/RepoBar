@@ -8,9 +8,9 @@ struct MenuLoggedOutView: View {
             Image(systemName: "person.crop.circle.badge.exclam")
                 .font(.system(size: 28, weight: .semibold))
                 .foregroundStyle(.secondary)
-            Text("Sign in to see your repositories")
+            Text(AppLocalizer().string("Sign in to see your repositories"))
                 .font(.headline)
-            Text("Connect your GitHub account to load pins and activity.")
+            Text(AppLocalizer().string("Connect your GitHub account to load pins and activity."))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -54,9 +54,9 @@ struct MenuEmptyStateView: View {
             Image(systemName: "tray.fill")
                 .font(.system(size: 24, weight: .semibold))
                 .foregroundStyle(.secondary)
-            Text(self.title)
+            Text(AppLocalizer().string(self.title))
                 .font(.headline)
-            Text(self.subtitle)
+            Text(AppLocalizer().string(self.subtitle))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -72,7 +72,7 @@ struct RateLimitBanner: View {
         HStack(spacing: 6) {
             Image(systemName: "clock.fill")
                 .foregroundStyle(.orange)
-            Text("Rate limit resets \(RelativeFormatter.string(from: self.reset, relativeTo: Date()))")
+            Text(String(format: AppLocalizer().string("Rate limit resets %@"), RelativeFormatter.string(from: self.reset, relativeTo: Date())))
                 .lineLimit(2)
             Spacer()
         }
@@ -120,7 +120,7 @@ struct RateLimitStatusRowView: View {
                 .foregroundStyle(self.isLimited ? .orange : MenuHighlightStyle.secondary(self.isHighlighted))
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("GitHub API Status")
+                Text(AppLocalizer().string("GitHub API Status"))
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
                 Text(self.summary)

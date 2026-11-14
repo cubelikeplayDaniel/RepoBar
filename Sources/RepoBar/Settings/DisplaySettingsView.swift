@@ -8,12 +8,12 @@ struct DisplaySettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Customize the menu layout and repo submenu items.")
+                Text(AppLocalizer().string("Customize the menu layout and repo submenu items."))
                     .font(.callout)
                     .foregroundStyle(.secondary)
                 Spacer()
                 Button(role: .destructive) { self.resetToDefaults() } label: {
-                    Text("Reset to Defaults")
+                    Text(AppLocalizer().string("Reset to Defaults"))
                 }
                 .buttonStyle(.bordered)
             }
@@ -38,7 +38,7 @@ struct DisplaySettingsView: View {
 
     private func mainMenuList() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Main Menu")
+            Text(AppLocalizer().string("Main Menu"))
                 .font(.headline)
             List {
                 ForEach(self.mainMenuItems, id: \.self) { item in
@@ -57,7 +57,7 @@ struct DisplaySettingsView: View {
 
     private func repoSubmenuList() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Repo Submenu")
+            Text(AppLocalizer().string("Repo Submenu"))
                 .font(.headline)
             List {
                 ForEach(self.repoSubmenuItems, id: \.self) { item in
@@ -99,7 +99,7 @@ struct DisplaySettingsView: View {
                     .foregroundStyle(effectiveSubtitle == nil ? .clear : .secondary)
             }
             Spacer()
-            Toggle("Visible", isOn: isVisible)
+            Toggle(AppLocalizer().string("Visible"), isOn: isVisible)
                 .labelsHidden()
                 .disabled(isRequired)
         }

@@ -16,7 +16,7 @@ struct ActionsLimitsStatusRowView: View {
                 .foregroundStyle(self.hasRunners ? Color(nsColor: .systemGreen) : MenuHighlightStyle.secondary(self.isHighlighted))
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("Actions & Runners")
+                Text(AppLocalizer().string("Actions & Runners"))
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
                 Text(self.summary)
@@ -81,7 +81,7 @@ struct ActionsRunnerRowView: View {
                         .font(.caption2)
                         .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                     if self.runner.busy {
-                        Text("busy")
+                        Text(AppLocalizer().string("busy"))
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.orange)
                     }
@@ -121,13 +121,13 @@ struct ActionsQueueRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("Concurrent Jobs")
+                Text(AppLocalizer().string("Concurrent Jobs"))
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
 
                 Spacer(minLength: 8)
 
-                Text("\(self.remainingConcurrentJobs) / \(self.planTier.concurrentJobs) remaining")
+                Text(String(format: AppLocalizer().string("%d / %d remaining"), self.remainingConcurrentJobs, self.planTier.concurrentJobs))
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -140,11 +140,11 @@ struct ActionsQueueRowView: View {
             )
 
             HStack(spacing: 10) {
-                Text("\(self.queueStatus.inProgressCount) running")
+                Text(String(format: AppLocalizer().string("%d running"), self.queueStatus.inProgressCount))
                     .font(.caption2)
                     .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                 if self.queueStatus.queuedCount > 0 {
-                    Text("\(self.queueStatus.queuedCount) queued")
+                    Text(String(format: AppLocalizer().string("%d queued"), self.queueStatus.queuedCount))
                         .font(.caption2)
                         .foregroundStyle(.orange)
                 }
@@ -191,19 +191,19 @@ struct ActionsRunnerFleetRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("Runners")
+                Text(AppLocalizer().string("Runners"))
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
                 Spacer(minLength: 8)
-                Text("\(self.runners.totalCount) total")
+                Text(String(format: AppLocalizer().string("%d total"), self.runners.totalCount))
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
             }
 
             HStack(spacing: 12) {
-                self.badge(count: self.runners.onlineCount, label: "online", color: Color(nsColor: .systemGreen))
-                self.badge(count: self.runners.busyCount, label: "busy", color: .orange)
-                self.badge(count: self.runners.offlineCount, label: "offline", color: Color(nsColor: .systemRed))
+                self.badge(count: self.runners.onlineCount, label: AppLocalizer().string("online"), color: Color(nsColor: .systemGreen))
+                self.badge(count: self.runners.busyCount, label: AppLocalizer().string("busy"), color: .orange)
+                self.badge(count: self.runners.offlineCount, label: AppLocalizer().string("offline"), color: Color(nsColor: .systemRed))
                 Spacer(minLength: 0)
             }
 
@@ -262,7 +262,7 @@ struct ActionsCacheUsageRowView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(width: 14)
-            Text("Cache")
+            Text(AppLocalizer().string("Cache"))
                 .font(.callout)
             Spacer()
             Text(Self.formatted(self.cacheUsage))
@@ -293,10 +293,10 @@ struct ArtifactRetentionRowView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(width: 14)
-            Text("Artifact retention")
+            Text(AppLocalizer().string("Artifact retention"))
                 .font(.callout)
             Spacer()
-            Text("\(self.retention.retentionDays) days")
+            Text(String(format: AppLocalizer().string("%d days"), self.retention.retentionDays))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -315,7 +315,7 @@ struct ActionsMinutesRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("Minutes Used")
+                Text(AppLocalizer().string("Minutes Used"))
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
 

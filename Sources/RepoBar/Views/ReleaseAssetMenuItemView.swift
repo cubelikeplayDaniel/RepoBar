@@ -26,7 +26,7 @@ struct ReleaseAssetMenuItemView: View {
                             .lineLimit(1)
                     }
 
-                    Text("\(self.summary.downloadCount) downloads")
+                    Text(String(format: AppLocalizer().string("%d downloads"), self.summary.downloadCount))
                         .font(.caption)
                         .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                         .lineLimit(1)

@@ -19,12 +19,12 @@ struct RepoSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Browse repositories RepoBar can access and choose what stays pinned or hidden.")
+            Text(AppLocalizer().string("Browse repositories RepoBar can access and choose what stays pinned or hidden."))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 8) {
-                TextField("Search repositories", text: self.$searchQuery)
+                TextField(AppLocalizer().string("Search repositories"), text: self.$searchQuery)
                     .textFieldStyle(.roundedBorder)
 
                 Button {
@@ -34,7 +34,7 @@ struct RepoSettingsView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
-                .help("Clear search")
+                .help(AppLocalizer().string("Clear search"))
                 .disabled(self.searchQuery.isEmpty)
             }
 
@@ -46,7 +46,7 @@ struct RepoSettingsView: View {
                 session: self.session,
                 appState: self.appState
             ) {
-                Picker("Visibility", selection: self.$newRepoVisibility) {
+                Picker(AppLocalizer().string("Visibility"), selection: self.$newRepoVisibility) {
                     ForEach([RepoVisibility.pinned, .hidden], id: \.id) { vis in
                         Text(AppLocalizer().string(vis.label)).tag(vis)
                     }
@@ -56,7 +56,7 @@ struct RepoSettingsView: View {
             }
 
             Table(self.filteredRows, selection: self.$selection, sortOrder: self.$sortOrder) {
-                TableColumn("Repository", value: \RepoBrowserRow.fullName) { row in
+                TableColumn(AppLocalizer().string("Repository"), value: \RepoBrowserRow.fullName) { row in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(row.fullName)
                             .lineLimit(1)
@@ -64,15 +64,15 @@ struct RepoSettingsView: View {
 
                         HStack(spacing: 6) {
                             if row.isFork {
-                                Label("Fork", systemImage: "tuningfork")
+                                Label(AppLocalizer().string("Fork"), systemImage: "tuningfork")
                                     .labelStyle(.titleAndIcon)
                             }
                             if row.isArchived {
-                                Label("Archived", systemImage: "archivebox")
+                                Label(AppLocalizer().string("Archived"), systemImage: "archivebox")
                                     .labelStyle(.titleAndIcon)
                             }
                             if row.isManual {
-                                Label("Manual", systemImage: "pencil")
+                                Label(AppLocalizer().string("Manual"), systemImage: "pencil")
                                     .labelStyle(.titleAndIcon)
                             }
                         }
@@ -82,35 +82,35 @@ struct RepoSettingsView: View {
                 }
                 .width(min: 300, ideal: 420, max: .infinity)
 
-                TableColumn("Issues", value: \RepoBrowserRow.sortableIssues) { row in
+                TableColumn(AppLocalizer().string("Issues"), value: \RepoBrowserRow.sortableIssues) { row in
                     Text(row.issueLabel)
                         .monospacedDigit()
                         .foregroundStyle(row.isManual ? .secondary : .primary)
                 }
                 .width(min: 56, ideal: 64, max: 76)
 
-                TableColumn("PRs", value: \RepoBrowserRow.sortablePulls) { row in
+                TableColumn(AppLocalizer().string("PRs"), value: \RepoBrowserRow.sortablePulls) { row in
                     Text(row.pullRequestLabel)
                         .monospacedDigit()
                         .foregroundStyle(row.isManual ? .secondary : .primary)
                 }
                 .width(min: 44, ideal: 52, max: 64)
 
-                TableColumn("Stars", value: \RepoBrowserRow.sortableStars) { row in
+                TableColumn(AppLocalizer().string("Stars"), value: \RepoBrowserRow.sortableStars) { row in
                     Text(row.starLabel)
                         .monospacedDigit()
                         .foregroundStyle(row.isManual ? .secondary : .primary)
                 }
                 .width(min: 52, ideal: 64, max: 76)
 
-                TableColumn("Updated", value: \RepoBrowserRow.sortablePushedAt) { row in
+                TableColumn(AppLocalizer().string("Updated"), value: \RepoBrowserRow.sortablePushedAt) { row in
                     Text(row.updatedLabel)
                         .lineLimit(1)
                         .foregroundStyle(.secondary)
                 }
                 .width(min: 80, ideal: 96, max: 120)
 
-                TableColumn("Visibility", value: \RepoBrowserRow.visibilitySortKey) { row in
+                TableColumn(AppLocalizer().string("Visibility"), value: \RepoBrowserRow.visibilitySortKey) { row in
                     RepoVisibilityMenu(visibility: row.visibility) { newValue in
                         Task { await self.set(row.fullName, to: newValue) }
                     }
@@ -125,11 +125,11 @@ struct RepoSettingsView: View {
             .layoutPriority(1)
             .onDeleteCommand { self.deleteSelection() }
             .contextMenu(forSelectionType: String.self) { selection in
-                Button("Open in GitHub") { self.openInGitHub(selection: selection) }
+                Button(AppLocalizer().string("Open in GitHub")) { self.openInGitHub(selection: selection) }
                 Divider()
-                Button("Pin") { Task { await self.bulkSet(selection, to: .pinned) } }
-                Button("Hide") { Task { await self.bulkSet(selection, to: .hidden) } }
-                Button("Set Visible") { Task { await self.bulkSet(selection, to: .visible) } }
+                Button(AppLocalizer().string("Pin")) { Task { await self.bulkSet(selection, to: .pinned) } }
+                Button(AppLocalizer().string("Hide")) { Task { await self.bulkSet(selection, to: .hidden) } }
+                Button(AppLocalizer().string("Set Visible")) { Task { await self.bulkSet(selection, to: .visible) } }
             } primaryAction: { selection in
                 self.openInGitHub(selection: selection)
             }
@@ -141,7 +141,7 @@ struct RepoSettingsView: View {
 
                 Spacer()
 
-                Button("Pin") {
+                Button(AppLocalizer().string("Pin")) {
                     Task { await self.bulkSet(self.selection, to: .pinned) }
                 }
                 .disabled(self.selection.isEmpty)
@@ -149,11 +149,11 @@ struct RepoSettingsView: View {
                 Button {
                     self.deleteSelection()
                 } label: {
-                    Label("Set Visible", systemImage: "eye")
+                    Label(AppLocalizer().string("Set Visible"), systemImage: "eye")
                 }
                 .disabled(self.selection.isEmpty)
 
-                Button("Refresh Now") {
+                Button(AppLocalizer().string("Refresh Now")) {
                     self.appState.requestRefresh(cancelInFlight: true)
                 }
             }

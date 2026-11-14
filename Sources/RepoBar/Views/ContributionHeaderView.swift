@@ -14,7 +14,7 @@ struct ContributionHeaderView: View {
             HStack(spacing: 6) {
                 Image(systemName: "person.crop.circle")
                     .font(.caption.weight(.semibold))
-                Text("\(self.displayName) · Contributions · \(self.session.settings.heatmap.span.label)")
+                Text("\(self.displayName) · \(AppLocalizer().string("Contributions")) · \(AppLocalizer().string(self.session.settings.heatmap.span.label))")
                     .font(.caption.weight(.semibold))
                     .lineLimit(1)
                 Spacer(minLength: 6)

@@ -145,7 +145,7 @@ struct RepoMenuCardView: View {
             HStack(spacing: 6) {
                 Image(systemName: "clock")
                     .foregroundStyle(self.warningColor)
-                Text("Rate limited until \(RelativeFormatter.string(from: limit, relativeTo: Date()))")
+                Text(String(format: AppLocalizer().string("Rate limited until %@"), RelativeFormatter.string(from: limit, relativeTo: Date())))
                     .font(.caption)
                     .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
             }

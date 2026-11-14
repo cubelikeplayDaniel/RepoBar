@@ -62,7 +62,7 @@ final class IssueNavigatorModel {
         self.platform = platform
         self.results = matches
         self.selectedURL = matches.first?.url
-        self.statusText = matches.isEmpty ? "Loading recent issues and pull requests." : "References in pasted order"
+        self.statusText = matches.isEmpty ? AppLocalizer().string("Loading recent issues and pull requests.") : AppLocalizer().string("References in pasted order")
     }
 
     var scopes: [IssueNavigatorScope] {
@@ -89,7 +89,7 @@ final class IssueNavigatorModel {
 
     var statusLine: String {
         if self.isSearching {
-            return "Searching…"
+            return AppLocalizer().string("Searching…")
         }
         if let errorText {
             return errorText
@@ -259,11 +259,14 @@ final class IssueNavigatorModel {
                 self.preloadPreviews(for: matches)
                 self.scheduleAISummaries(for: matches, generation: generation)
                 if matches.isEmpty {
-                    self.statusText = "No recent issues or pull requests in this scope."
+                    self.statusText = AppLocalizer().string("No recent issues or pull requests in this scope.")
                 } else if trimmed.isEmpty {
-                    self.statusText = "Recent subscribed and accessible items"
+                    self.statusText = AppLocalizer().string("Recent subscribed and accessible items")
                 } else {
-                    self.statusText = "Showing recent items; type at least \(AppLimits.IssueNavigator.minimumSearchCharacters) characters to search."
+                    self.statusText = String(
+                        format: AppLocalizer().string("Showing recent items; type at least %d characters to search."),
+                        AppLimits.IssueNavigator.minimumSearchCharacters
+                    )
                 }
             } catch is CancellationError {
                 return
@@ -282,7 +285,10 @@ final class IssueNavigatorModel {
 
             self.results = []
             self.selectedURL = nil
-            self.statusText = "Type at least \(AppLimits.IssueNavigator.minimumSearchCharacters) characters, or paste a GitHub reference."
+            self.statusText = String(
+                format: AppLocalizer().string("Type at least %d characters, or paste a GitHub reference."),
+                AppLimits.IssueNavigator.minimumSearchCharacters
+            )
             self.errorText = nil
             return
         }
@@ -422,11 +428,13 @@ final class IssueNavigatorModel {
         preservesReferenceOrder: Bool = false
     ) -> String {
         if matches.isEmpty {
-            searchedText.isEmpty ? "No recent items in this scope." : "No matching issues or pull requests."
+            searchedText.isEmpty
+                ? AppLocalizer().string("No recent items in this scope.")
+                : AppLocalizer().string("No matching issues or pull requests.")
         } else if preservesReferenceOrder {
-            "References in pasted order"
+            AppLocalizer().string("References in pasted order")
         } else {
-            "Updated newest first"
+            AppLocalizer().string("Updated newest first")
         }
     }
 }

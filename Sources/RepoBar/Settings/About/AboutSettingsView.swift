@@ -63,7 +63,7 @@ struct AboutSettingsView: View {
             VStack(spacing: 2) {
                 Text(self.appName)
                     .font(.title3).bold()
-                Text("Version \(self.versionString)")
+                Text(String(format: AppLocalizer().string("Version %@"), self.versionString))
                     .foregroundStyle(.secondary)
                 if let buildTimestamp {
                     let suffix: String = {
@@ -72,7 +72,7 @@ struct AboutSettingsView: View {
                         }
                         return ""
                     }()
-                    Text("Built \(buildTimestamp)\(suffix)")
+                    Text(String(format: AppLocalizer().string("Built %@%@"), buildTimestamp, suffix))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }

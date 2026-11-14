@@ -92,35 +92,35 @@ struct AccountSettingsView: View {
                         }
                         .buttonStyle(.bordered)
                         if self.session.settings.authMethod == .oauth, self.session.settings.enterpriseHost == nil {
-                            Text("Private organization repositories are visible only after the RepoBar GitHub App is installed on that organization or selected repository.")
+                            Text(AppLocalizer().string("Private organization repositories are visible only after the RepoBar GitHub App is installed on that organization or selected repository."))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Link("Manage GitHub App installation", destination: RepoBarAuthDefaults.appInstallURL)
+                            Link(AppLocalizer().string("Manage GitHub App installation"), destination: RepoBarAuthDefaults.appInstallURL)
                                 .font(.caption)
                         }
                     }
                     .padding(.vertical, 4)
                 default:
-                    Picker("Authentication", selection: self.$authMethod) {
+                    Picker(AppLocalizer().string("Authentication"), selection: self.$authMethod) {
                         ForEach(AuthMethod.allCases, id: \.self) { method in
-                            Text(method.label).tag(method)
+                            Text(AppLocalizer().string(method.label)).tag(method)
                         }
                     }
                     .pickerStyle(.segmented)
 
                     if self.authMethod == .pat {
-                        LabeledContent("Token") {
+                        LabeledContent(AppLocalizer().string("Token")) {
                             SecureField("ghp_...", text: self.$patInput)
                                 .frame(minWidth: self.enterpriseFieldMinWidth)
                                 .layoutPriority(1)
                         }
-                        Text("Recommended for SAML SSO organizations. Required scopes: repo, read:org")
+                        Text(AppLocalizer().string("Recommended for SAML SSO organizations. Required scopes: repo, read:org"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Link("Create a token on GitHub", destination: self.createTokenURL())
+                        Link(AppLocalizer().string("Create a token on GitHub"), destination: self.createTokenURL())
                             .font(.caption)
                         if self.hostMode == .enterprise {
-                            LabeledContent("Enterprise Base URL") {
+                            LabeledContent(AppLocalizer().string("Enterprise Base URL")) {
                                 TextField("https://ghe.example.com", text: self.$enterpriseHost)
                                     .frame(minWidth: self.enterpriseFieldMinWidth)
                                     .layoutPriority(1)
@@ -132,7 +132,7 @@ struct AccountSettingsView: View {
                                     .controlSize(.small)
                                     .frame(width: self.spinnerSize, height: self.spinnerSize)
                             }
-                            Button(self.isValidatingPAT ? "Signing in…" : "Sign in with Token") {
+                            Button(self.isValidatingPAT ? AppLocalizer().string("Signing in…") : AppLocalizer().string("Sign in with Token")) {
                                 self.loginWithPAT()
                             }
                             .disabled(self.patInput.isEmpty || self.isValidatingPAT)
@@ -140,32 +140,32 @@ struct AccountSettingsView: View {
                         }
                     } else {
                         if self.hostMode == .enterprise {
-                            LabeledContent("Enterprise Base URL") {
+                            LabeledContent(AppLocalizer().string("Enterprise Base URL")) {
                                 TextField("https://ghe.example.com", text: self.$enterpriseHost)
                                     .frame(minWidth: self.enterpriseFieldMinWidth)
                                     .layoutPriority(1)
                             }
-                            LabeledContent("Client ID") {
+                            LabeledContent(AppLocalizer().string("Client ID")) {
                                 TextField("", text: self.$clientID)
                                     .frame(minWidth: self.enterpriseFieldMinWidth)
                                     .layoutPriority(1)
                             }
-                            LabeledContent("Client Secret") {
+                            LabeledContent(AppLocalizer().string("Client Secret")) {
                                 SecureField("", text: self.$clientSecret)
                                     .frame(minWidth: self.enterpriseFieldMinWidth)
                                     .layoutPriority(1)
                             }
-                            Text("Create an OAuth App in your enterprise server. Callback URL: http://127.0.0.1:53682/callback")
+                            Text(AppLocalizer().string("Create an OAuth App in your enterprise server. Callback URL: http://127.0.0.1:53682/callback"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         } else {
-                            Text("Uses the built-in GitHub.com OAuth app.")
+                            Text(AppLocalizer().string("Uses the built-in GitHub.com OAuth app."))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("Private organization repositories require the RepoBar GitHub App installation to include that organization or repository.")
+                            Text(AppLocalizer().string("Private organization repositories require the RepoBar GitHub App installation to include that organization or repository."))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Link("Install RepoBar GitHub App", destination: RepoBarAuthDefaults.appInstallURL)
+                            Link(AppLocalizer().string("Install RepoBar GitHub App"), destination: RepoBarAuthDefaults.appInstallURL)
                                 .font(.caption)
                         }
                         HStack(spacing: 8) {
@@ -174,13 +174,13 @@ struct AccountSettingsView: View {
                                     .controlSize(.small)
                                     .frame(width: self.spinnerSize, height: self.spinnerSize)
                             }
-                            Button(self.session.account == .loggingIn ? "Signing in…" : self.hostMode == .enterprise ? "Sign in to Enterprise" : "Sign in to GitHub.com") {
+                            Button(self.session.account == .loggingIn ? AppLocalizer().string("Signing in…") : self.hostMode == .enterprise ? AppLocalizer().string("Sign in to Enterprise") : AppLocalizer().string("Sign in to GitHub.com")) {
                                 self.login()
                             }
                             .disabled(self.session.account == .loggingIn)
                             .buttonStyle(.borderedProminent)
                         }
-                        Text("Uses browser-based OAuth. Tokens are stored by RepoBar's configured auth store.")
+                        Text(AppLocalizer().string("Uses browser-based OAuth. Tokens are stored by RepoBar's configured auth store."))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -190,22 +190,22 @@ struct AccountSettingsView: View {
             Section {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 8) {
-                        TextField("Add owner", text: self.$monitoredOwnersDraft)
+                        TextField(AppLocalizer().string("Add owner"), text: self.$monitoredOwnersDraft)
                             .textFieldStyle(.roundedBorder)
                             .onSubmit { self.addMonitoredOwners() }
-                        Button("Add") { self.addMonitoredOwners() }
+                        Button(AppLocalizer().string("Add")) { self.addMonitoredOwners() }
                             .disabled(Self.parseOwners(self.monitoredOwnersDraft).isEmpty)
-                        Button("Use Visible") { self.useVisibleOwners() }
+                        Button(AppLocalizer().string("Use Visible")) { self.useVisibleOwners() }
                             .disabled(self.visibleOwnerCandidates.isEmpty)
-                        Button("Auto") { self.clearMonitoredOwners() }
+                        Button(AppLocalizer().string("Auto")) { self.clearMonitoredOwners() }
                             .disabled(self.selectedMonitoredOwners.isEmpty)
                     }
 
                     VStack(spacing: 0) {
                         if self.selectedMonitoredOwners.isEmpty {
                             self.monitoredOwnerRow(
-                                title: "Auto",
-                                subtitle: "Personal account plus visible repository owners",
+                                title: AppLocalizer().string("Auto"),
+                                subtitle: AppLocalizer().string("Personal account plus visible repository owners"),
                                 systemImage: "wand.and.stars",
                                 removeAction: nil
                             )
@@ -233,9 +233,9 @@ struct AccountSettingsView: View {
                     )
                 }
             } header: {
-                Text("Monitored Owners")
+                Text(AppLocalizer().string("Monitored Owners"))
             } footer: {
-                Text("Owners control which accounts RepoBar uses for Actions & Runners. Auto follows your personal account and visible repository owners.")
+                Text(AppLocalizer().string("Owners control which accounts RepoBar uses for Actions & Runners. Auto follows your personal account and visible repository owners."))
             }
 
             if let validationError {
@@ -374,7 +374,7 @@ struct AccountSettingsView: View {
                 }
                 .buttonStyle(.borderless)
                 .foregroundStyle(.secondary)
-                .help("Remove owner")
+                .help(AppLocalizer().string("Remove owner"))
             }
         }
         .padding(.horizontal, 10)

@@ -214,7 +214,7 @@ struct AdvancedSettingsView: View {
                     Text(AppLocalizer().string("OpenAI API key"))
                         .fixedSize()
                     Spacer(minLength: 12)
-                    SecureField("API key", text: self.$openAIAPIKey)
+                    SecureField(AppLocalizer().string("API key"), text: self.$openAIAPIKey)
                         .frame(width: 240)
                         .layoutPriority(1)
                     Button {
@@ -224,7 +224,7 @@ struct AdvancedSettingsView: View {
                     }
                     .buttonStyle(.borderless)
                     .disabled(self.openAIAPIKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    .help("Save API key")
+                    .help(AppLocalizer().string("Save API key"))
                     Button {
                         Task { await self.testAISummary() }
                     } label: {
@@ -238,14 +238,14 @@ struct AdvancedSettingsView: View {
                     }
                     .buttonStyle(.borderless)
                     .disabled(self.isTestingAISummary)
-                    .help("Test AI summaries")
+                    .help(AppLocalizer().string("Test AI summaries"))
                     Button {
                         self.clearOpenAIAPIKey()
                     } label: {
                         Image(systemName: "trash")
                     }
                     .buttonStyle(.borderless)
-                    .help("Clear stored API key")
+                    .help(AppLocalizer().string("Clear stored API key"))
                 }
 
                 Text(self.openAIKeyStatus)

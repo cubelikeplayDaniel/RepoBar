@@ -305,7 +305,7 @@ private struct RepoAutocompleteRow: View {
                         .monospacedDigit()
 
                     if let pushedAt = self.repo.pushedAt {
-                        Text("pushed \(Self.compactAge(since: pushedAt))")
+                        Text(String(format: AppLocalizer().string("pushed %@"), Self.compactAge(since: pushedAt)))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .monospacedDigit()

@@ -90,7 +90,7 @@ struct IssueNavigatorView: View {
         return VStack(alignment: .leading, spacing: 8) {
             IssueNavigatorSearchField(
                 text: $model.searchText,
-                placeholder: "Search issues and pull requests",
+                placeholder: AppLocalizer().string("Search issues and pull requests"),
                 onSubmit: {
                     self.model.submitSearch()
                 }
@@ -117,7 +117,7 @@ struct IssueNavigatorView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "doc.on.clipboard")
-                        Text("Clipboard: \(self.model.clipboardDisplayText)")
+                        Text("\(AppLocalizer().string("Clipboard")): \(self.model.clipboardDisplayText)")
                             .lineLimit(1)
                         Spacer()
                         Image(systemName: "arrow.turn.down.left")
@@ -149,7 +149,7 @@ struct IssueNavigatorView: View {
             HStack {
                 IssueNavigatorCountBadge(count: self.model.results.count)
                 Spacer()
-                Text("Updated newest first")
+                Text(AppLocalizer().string("Updated newest first"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -160,13 +160,13 @@ struct IssueNavigatorView: View {
 
             if let errorText = self.model.errorText {
                 self.sidebarMessage(
-                    title: "Search failed",
+                    title: AppLocalizer().string("Search failed"),
                     message: errorText,
                     systemImage: "exclamationmark.triangle"
                 )
             } else if self.model.results.isEmpty {
                 self.sidebarMessage(
-                    title: "No matches",
+                    title: AppLocalizer().string("No matches"),
                     message: self.model.statusText,
                     systemImage: "tray"
                 )
@@ -185,8 +185,8 @@ struct IssueNavigatorView: View {
                                 self.model.select(match)
                             }
                             .contextMenu {
-                                Button("Open in Browser") { self.model.open(match) }
-                                Button("Copy URL") { self.model.copy(match) }
+                                Button(AppLocalizer().string("Open in Browser")) { self.model.open(match) }
+                                Button(AppLocalizer().string("Copy URL")) { self.model.copy(match) }
                             }
                         }
                     }
@@ -237,10 +237,10 @@ struct IssueNavigatorView: View {
                 Image(systemName: "rectangle.and.text.magnifyingglass")
                     .font(.system(size: 36, weight: .regular))
                     .foregroundStyle(.tertiary)
-                Text("Pick a result")
+                Text(AppLocalizer().string("Pick a result"))
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(.secondary)
-                Text("Search by title, URL, owner/repo#number, or commit SHA.")
+                Text(AppLocalizer().string("Search by title, URL, owner/repo#number, or commit SHA."))
                     .font(.callout)
                     .foregroundStyle(.tertiary)
             }
@@ -262,7 +262,7 @@ struct IssueNavigatorView: View {
             }
             .buttonStyle(.borderless)
             .disabled(!canGoBack)
-            .help("Back")
+            .help(AppLocalizer().string("Back"))
 
             ZStack {
                 Circle()
@@ -283,7 +283,7 @@ struct IssueNavigatorView: View {
                         .truncationMode(.middle)
                     Text(match.query.displayText)
                     if let state = match.state?.label {
-                        Text(state)
+                        Text(AppLocalizer().string(state))
                     }
                 }
                 .font(.caption)

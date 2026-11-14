@@ -11,32 +11,32 @@ struct SettingsView: View {
     var body: some View {
         TabView(selection: self.$session.settingsSelectedTab) {
             GeneralSettingsView(session: self.session, appState: self.appState)
-                .tabItem { Label("General", systemImage: "gear") }
+                .tabItem { Label(AppLocalizer().string("General"), systemImage: "gear") }
                 .tag(SettingsTab.general)
             DisplaySettingsView(session: self.session, appState: self.appState)
-                .tabItem { Label("Display", systemImage: "rectangle.3.group") }
+                .tabItem { Label(AppLocalizer().string("Display"), systemImage: "rectangle.3.group") }
                 .tag(SettingsTab.display)
             RepoSettingsView(session: self.session, appState: self.appState)
-                .tabItem { Label("Repositories", systemImage: "tray.full") }
+                .tabItem { Label(AppLocalizer().string("Repositories"), systemImage: "tray.full") }
                 .tag(SettingsTab.repositories)
             AccountSettingsView(session: self.session, appState: self.appState)
-                .tabItem { Label("Accounts", systemImage: "person.crop.circle") }
+                .tabItem { Label(AppLocalizer().string("Accounts"), systemImage: "person.crop.circle") }
                 .tag(SettingsTab.accounts)
             NotificationSettingsView(session: self.session, appState: self.appState)
-                .tabItem { Label("Notifications", systemImage: "bell.badge") }
+                .tabItem { Label(AppLocalizer().string("Notifications"), systemImage: "bell.badge") }
                 .tag(SettingsTab.notifications)
             AdvancedSettingsView(session: self.session, appState: self.appState)
-                .tabItem { Label("Advanced", systemImage: "slider.horizontal.3") }
+                .tabItem { Label(AppLocalizer().string("Advanced"), systemImage: "slider.horizontal.3") }
                 .tag(SettingsTab.advanced)
             #if DEBUG
                 if self.session.settings.debugPaneEnabled {
                     DebugSettingsView(session: self.session, appState: self.appState)
-                        .tabItem { Label("Debug", systemImage: "ant.fill") }
+                        .tabItem { Label(AppLocalizer().string("Debug"), systemImage: "ant.fill") }
                         .tag(SettingsTab.debug)
                 }
             #endif
             AboutSettingsView()
-                .tabItem { Label("About", systemImage: "info.circle") }
+                .tabItem { Label(AppLocalizer().string("About"), systemImage: "info.circle") }
                 .tag(SettingsTab.about)
         }
         .tabViewStyle(.automatic)

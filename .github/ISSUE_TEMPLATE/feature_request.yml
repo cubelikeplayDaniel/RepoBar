@@ -1,0 +1,17 @@
+name: 💡 功能与汉化改进建议
+description: 提出对 RepoBar 中文版的汉化润色、菜单排版优化或新功能提议
+title: "[建议]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 建议详情
+      description: 请清晰描述您希望优化或新增的功能、或某处文案的更好译法
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 使用场景与价值
+      description: 这个改进在日常使用 GitHub 菜单栏监控时能带来什么便利？

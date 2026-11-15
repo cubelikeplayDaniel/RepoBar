@@ -1,0 +1,58 @@
+name: 🐛 缺陷与 Bug 反馈
+description: 提交在使用 RepoBar 简体中文版过程中遇到的界面错位、未汉化词条或程序异常
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您提交反馈！在提交前，请先确保已在 [Releases 最新发行版](https://github.com/cubelikeplayDaniel/RepoBar/releases/latest) 下载并安装了最新版本。
+  - type: dropdown
+    id: arch
+    attributes:
+      label: 运行芯片与架构
+      description: 您的 Mac 使用哪种芯片？
+      options:
+        - Apple Silicon (M1 / M2 / M3 / M4 / Pro / Max / Ultra)
+        - Intel Mac (x86_64)
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: macOS 系统版本
+      description: 例如 macOS 15.1 Sequoia 或 macOS 15.0
+      placeholder: macOS 15.x
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: RepoBar 应用版本
+      description: 可在 RepoBar 菜单栏图标 → 偏好设置… → 关于 中查看
+      placeholder: v0.10.4-zh-Hans
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题详细描述
+      description: 发生了什么？例如某个二级菜单未汉化、授权弹窗异常或应用无响应
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 详细列出如何重现该问题
+      placeholder: |
+        1. 打开菜单栏 RepoBar 图标
+        2. 悬停在某个仓库上
+        3. 点击某个子菜单项...
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 屏幕截图或录屏 (可选)
+      description: 可直接将截图拖拽粘贴至此输入框

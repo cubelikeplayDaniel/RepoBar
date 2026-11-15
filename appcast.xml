@@ -4,7 +4,7 @@
         <title>RepoBar (Simplified Chinese Edition)</title>
         <item>
             <title>0.10.4</title>
-            <pubDate>Sat, 14 Nov 2026 11:36:23 +0000</pubDate>
+            <pubDate>Sun, 15 Nov 2026 04:22:50 +0000</pubDate>
             <link>https://raw.githubusercontent.com/cubelikeplayDaniel/RepoBar/main/appcast.xml</link>
             <sparkle:version>38</sparkle:version>
             <sparkle:shortVersionString>0.10.4</sparkle:shortVersionString>
@@ -13,7 +13,7 @@
 - 全界面 100% 简体中文本地化支持
 - 原生支持 macOS 系统设置单应用语言切换
 - 免钥匙串重复授权弹窗优化&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;</description>
-            <enclosure url="https://github.com/cubelikeplayDaniel/RepoBar/releases/download/v0.10.4-zh-Hans/RepoBar-v0.10.4-zh-Hans-macOS-universal.zip" length="27017421" type="application/octet-stream" sparkle:edSignature="C1cuptH+izjQpqOJWTQv4Y/3y21SgeD4sRDPPSdLHA3UqASVzy6cJn7bWPwisaeL2PdepitiyEZA2iad+eGgAQ==" />
+            <enclosure url="https://github.com/cubelikeplayDaniel/RepoBar/releases/download/v0.10.4-zh-Hans/RepoBar-v0.10.4-zh-Hans-macOS-universal.zip" length="26441328" type="application/octet-stream" sparkle:edSignature="xSwmXMeaS5U3RabVNLRoqwZRAXgSNV7596NO3/0Xj6FJSBVHIWCGL2aUHoIMvdcC2+2ds3uKxKW4kUJDer2+Bg==" />
         </item>
     </channel>
 </rss>

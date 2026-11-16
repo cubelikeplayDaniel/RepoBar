@@ -3,17 +3,17 @@
     <channel>
         <title>RepoBar (Simplified Chinese Edition)</title>
         <item>
-            <title>0.10.4</title>
-            <pubDate>Sun, 15 Nov 2026 04:22:50 +0000</pubDate>
+            <title>0.10.5</title>
+            <pubDate>Mon, 16 Nov 2026 11:07:59 +0000</pubDate>
             <link>https://raw.githubusercontent.com/cubelikeplayDaniel/RepoBar/main/appcast.xml</link>
-            <sparkle:version>38</sparkle:version>
-            <sparkle:shortVersionString>0.10.4</sparkle:shortVersionString>
+            <sparkle:version>39</sparkle:version>
+            <sparkle:shortVersionString>0.10.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description>&lt;html&gt;&lt;body&gt;&lt;pre&gt;RepoBar v0.10.4-zh-Hans 简体中文完整汉化版
+            <description>&lt;html&gt;&lt;body&gt;&lt;pre&gt;RepoBar v0.10.5-zh-Hans 简体中文完整汉化版
 - 全界面 100% 简体中文本地化支持
 - 原生支持 macOS 系统设置单应用语言切换
 - 免钥匙串重复授权弹窗优化&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;</description>
-            <enclosure url="https://github.com/cubelikeplayDaniel/RepoBar/releases/download/v0.10.4-zh-Hans/RepoBar-v0.10.4-zh-Hans-macOS-universal.zip" length="26441328" type="application/octet-stream" sparkle:edSignature="xSwmXMeaS5U3RabVNLRoqwZRAXgSNV7596NO3/0Xj6FJSBVHIWCGL2aUHoIMvdcC2+2ds3uKxKW4kUJDer2+Bg==" />
+            <enclosure url="https://github.com/cubelikeplayDaniel/RepoBar/releases/download/v0.10.5-zh-Hans/RepoBar-v0.10.5-zh-Hans-macOS-universal.zip" length="26441330" type="application/octet-stream" sparkle:edSignature="VYiSn/XSqxvNEx/95vah2MnoR36HEWFCXBLSJ8v+doz1ikyX0hpDjp3LrvqlagbpEZVVJCXpT+5YRGn9D/NGDw==" />
         </item>
     </channel>
 </rss>
